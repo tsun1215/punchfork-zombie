@@ -5,6 +5,8 @@ class RecipeReference < ActiveRecord::Base
   VALID_URL_REGEX = /\A(http(?:s)?\:\/\/[a-zA-Z0-9\-]+(?:\.[a-zA-Z0-9\-]+)*\.[a-zA-Z]{2,8}(.)*)\z/
   validates :external, format: {with: VALID_URL_REGEX}, allow_nil: true
 
+  belongs_to :user
+
   private
 
     def has_external_xor_recipe_id 
