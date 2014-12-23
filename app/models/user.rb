@@ -7,5 +7,5 @@ class User < ActiveRecord::Base
                     uniqueness: { case_sensitive: false }
   has_secure_password
 
-  has_many :recipe_references
+  has_many :recipe_references, dependent: :destroy
 end
