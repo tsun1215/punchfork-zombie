@@ -5,3 +5,7 @@
 #
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
+
+100.times do |n|
+  RecipeReference.create!(name: "Recipe #{n}", external: "http://reddit.com/r/food")
+end

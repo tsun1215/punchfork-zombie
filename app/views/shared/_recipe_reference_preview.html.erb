@@ -1,0 +1,11 @@
+<% # debug only %>
+<% recipe_reference ||= nil %>
+<% if !recipe_reference %>
+  <% raise "must pass in variable as recipe_reference" %>
+<% end %>
+
+<p>
+  <a href="<%= recipe_reference.external if recipe_reference.external %>">
+    <%= recipe_reference.name %>
+  </a>
+</p>
