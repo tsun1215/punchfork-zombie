@@ -1,4 +1,13 @@
 class RecipesController < ApplicationController
+  
+  def index
+    @recipes = Recipe.all
+  end
+
+  def show
+    @recipes = Recipe.all
+  end
+
   def new
     @recipe = Recipe.new
   end
@@ -32,7 +41,7 @@ class RecipesController < ApplicationController
     @recipe.destroy
     respond_to do |format|
       format.html { redirect_to :index, notice: "Recipe successfully deleted" }
-      format.json { status: :ok }
+      format.json { render status: :ok }
     end
   end
 

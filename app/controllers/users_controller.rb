@@ -1,5 +1,6 @@
 class UsersController < ApplicationController
   before_action :set_user, only: [:show, :edit, :update, :destroy]
+  protect_from_forgery :except => [:create, :update, :destroy] 
 
   # GET /users
   # GET /users.json
