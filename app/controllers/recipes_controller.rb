@@ -16,12 +16,24 @@ class RecipesController < ApplicationController
   end
 
   def create
-    @recipe = Recipe.new(recipe_params)
-    if @recipe.save
-      render json: @recipe, status: :ok
+    r = Recipe.new(recipe_params)
+    ref = RecipeReference.new(recipe_ref_params)
+    if recipe_params.empty?
+      if ref.save
+        @recipe = RecipeIntermediate.new(ref, r)
+        render :show and return
+      end
     else
-      render json: @user.errors, status: :unprocessable_entity
+      if r.save
+        ref.recipe_id = r.id
+        if ref.save
+          r.recipe_reference = ref
+          @recipe = RecipeIntermediate.new(ref, r)
+          render :show and return
+        end
+      end
     end
+    render json: r.errors.to_a + ref.errors.to_a, status: :unprocessable_entity
   end
 
   def update
@@ -39,11 +51,15 @@ class RecipesController < ApplicationController
 
   private
     def recipe_params
-      params.require(:recipe).permit(:description, :ingredients, :instructions)
+      params.permit(:description, :instructions).tap do |w|
+        if params[:ingredients]
+          w[:ingredients] = params[:ingredients]
+        end
+      end
     end
 
-    def external_params
-      params.require(:recipe_reference).permit(:name, :external)
+    def recipe_ref_params
+      params.permit(:name, :external)
     end
     def set_recipe
       ref = RecipeReference.find(params[:id])
