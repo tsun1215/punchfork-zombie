@@ -10,11 +10,7 @@ class ApplicationController < ActionController::Base
 
   # Change to display all API endpoints + descriptions
   def root
-    @routes = []
-    Rails.application.routes.routes.each do |route|
-      route = route.path.spec.to_s
-      @routes << route if route.starts_with?('/recipe')
-    end
-    render json: @routes
+    config = YAML.load_file("config/config.yml")
+    render json: config
   end
 end
