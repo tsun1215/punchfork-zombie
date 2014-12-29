@@ -15,10 +15,6 @@ class RecipesController < ApplicationController
     render "show.json.jbuilder"
   end
 
-  def new
-    @recipe = Recipe.new
-  end
-
   def create
     @recipe = Recipe.new(recipe_params)
     if @recipe.save
