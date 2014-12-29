@@ -1,11 +1,18 @@
 class RecipesController < ApplicationController
-  
+  include RecipesHelper
+  before_action :set_recipe, only: [:show, :update, :destroy]
+  protect_from_forgery :except => [:create, :update, :destroy]
+  rescue_from ActiveRecord::RecordNotFound do |e|
+    raise_error("Object not found", :not_found)
+  end
+
   def index
-    @recipes = Recipe.all
+    @recipes = RecipeReference.all
+    render "index.json.jbuilder"
   end
 
   def show
-    @recipes = Recipe.all
+    render "show.json.jbuilder"
   end
 
   def new
@@ -14,35 +21,24 @@ class RecipesController < ApplicationController
 
   def create
     @recipe = Recipe.new(recipe_params)
-    respond_to do |format|
-      if @recipe.save
-        format.html { redirect_to @user, notice: "Recipe successfully added" }
-        format.json { render :index, status: :created, location: @recipe }
-      else
-        format.html { render :new_internal }
-        format.json { render json: @user.errors, status: :unprocessable_entity }
-      end
+    if @recipe.save
+      render json: @recipe, status: :ok
+    else
+      render json: @user.errors, status: :unprocessable_entity
     end
   end
 
   def update
-    respond_to do |format|
-      if @recipe.update(recipe_params)
-        format.html { redirect_to @recipe, notice: "Recipe successfully updated" }
-        format.json { render :index, status: :ok, location: @recipe }
-      else
-        format.html { render :new_internal }
-        format.json { render json: @recipe.errors, status: :unprocessable_entity }
-      end
+    if @recipe.update(recipe_params)
+      redirect_to @recipe
+    else
+      render json: @recipe.errors, status: :unprocessable_entity
     end
   end
 
   def destroy
     @recipe.destroy
-    respond_to do |format|
-      format.html { redirect_to :index, notice: "Recipe successfully deleted" }
-      format.json { render status: :ok }
-    end
+    render nothing: true, status: :ok
   end
 
   private
@@ -52,5 +48,10 @@ class RecipesController < ApplicationController
 
     def external_params
       params.require(:recipe_reference).permit(:name, :external)
+    end
+    def set_recipe
+      ref = RecipeReference.find(params[:id])
+      r = ref.recipe
+      @recipe = RecipeIntermediate.new(ref, r)
     end
 end
