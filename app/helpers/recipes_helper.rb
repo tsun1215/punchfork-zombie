@@ -35,6 +35,11 @@ module RecipesHelper
       @recipe.errors.to_a + @ref.errors.to_a
     end
 
+    def destroy()
+      @recipe.destroy
+      @ref.destroy
+    end
+
     def repond_to?(method)
       if @ref.respond_to?(method.to_s)
         true
