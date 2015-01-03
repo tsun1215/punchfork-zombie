@@ -4,8 +4,10 @@ module RecipesHelper
       @ref = recipe_reference
       if !recipe
         @recipe = Recipe.new
+        @external = true
       else
         @recipe = recipe
+        @external = false
       end
     end
 
@@ -17,6 +19,20 @@ module RecipesHelper
       else
         super
       end
+    end
+
+    def update(recipe_params, recipe_ref_params)
+      if not @external and not recipe_params.empty?
+        @recipe.update(recipe_params)
+      end
+      if not recipe_ref_params.empty?
+        @ref.update(recipe_ref_params)
+      end
+      self.errors.empty?
+    end
+
+    def errors()
+      @recipe.errors.to_a + @ref.errors.to_a
     end
 
     def repond_to?(method)

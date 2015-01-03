@@ -37,8 +37,8 @@ class RecipesController < ApplicationController
   end
 
   def update
-    if @recipe.update(recipe_params)
-      redirect_to @recipe
+    if @recipe.update(recipe_params, recipe_ref_params)
+      render :show and return
     else
       render json: @recipe.errors, status: :unprocessable_entity
     end
