@@ -5,4 +5,5 @@ class Recipe < ActiveRecord::Base
   validates :instructions, presence: true
 
   belongs_to :recipe_reference
+  has_one :recipe
 end

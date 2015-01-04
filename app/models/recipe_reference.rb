@@ -6,6 +6,7 @@ class RecipeReference < ActiveRecord::Base
   validates :external, format: {with: VALID_URL_REGEX}, allow_nil: true
 
   belongs_to :user
+  belongs_to :recipe_reference
   has_one :recipe
 
   private
