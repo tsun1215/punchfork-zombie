@@ -39,7 +39,7 @@ Retrieves information about the given recipe
 ```
 
 ## POST /api/recipes/
-Creates a recipe with the given paramters. The API infers if the recipe should be created internally or as a link to an external recipe.
+Creates a recipe with the given parameters. The API infers if the recipe should be created internally or as a link to an external recipe.
 
 ### Internal Recipe Format
 ```json
