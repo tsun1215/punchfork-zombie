@@ -13,4 +13,12 @@ class ApplicationController < ActionController::Base
     config = YAML.load_file("config/config.yml")
     render json: config
   end
+
+  private
+
+  def authenticate
+    authenticate_or_request_with_http_token do |token, options|
+      @user = User.where(session_token: token).first
+    end
+  end
 end
