@@ -1,8 +1,8 @@
 class RecipesController < ApplicationController
   include RecipesHelper
-  before_action :authenticate, :except =>[:index, :show]
+  before_action :authenticate, except: [:index, :show]
   before_action :set_recipe, only: [:show, :update, :destroy]
-  protect_from_forgery :except => [:create, :update, :destroy]
+  # protect_from_forgery :except => [:create, :update, :destroy]
   rescue_from ActiveRecord::RecordNotFound do |e|
     raise_error("Object not found", :not_found)
   end
@@ -62,6 +62,7 @@ class RecipesController < ApplicationController
     def recipe_ref_params
       params.permit(:name, :external)
     end
+
     def set_recipe
       ref = RecipeReference.find(params[:id])
       r = ref.recipe
